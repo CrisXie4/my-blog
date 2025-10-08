@@ -732,12 +732,7 @@
             quoteElement.textContent = '加载中...';
 
             try {
-                const apiUrl = process.env.YAOHU_URL || '';
-                const apiKey = process.env.YAOHU_API || '';
-                if (!apiUrl || !apiKey) {
-                    throw new Error('API配置未找到');
-                }
-                const response = await fetch(`${apiUrl}?key=${apiKey}`);
+                const response = await fetch('/api/random-quote');
 
                 if (!response.ok) {
                     throw new Error('API请求失败');
@@ -745,15 +740,8 @@
 
                 const data = await response.json();
 
-                // 尝试多种可能的数据格式
-                if (data.data) {
-                    quoteElement.textContent = `"${data.data}"`;
-                } else if (data.text) {
-                    quoteElement.textContent = `"${data.text}"`;
-                } else if (data.content) {
-                    quoteElement.textContent = `"${data.content}"`;
-                } else if (typeof data === 'string') {
-                    quoteElement.textContent = `"${data}"`;
+                if (data.quote) {
+                    quoteElement.textContent = `"${data.quote}"`;
                 } else {
                     quoteElement.textContent = '"每一天都是新的开始。"';
                 }
