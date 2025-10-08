@@ -732,7 +732,12 @@
             quoteElement.textContent = '加载中...';
 
             try {
-                const response = await fetch('https://api.yaohud.cn/api/randtext/get?key=Yjyo49xMzn9p6cNOx0w');
+                const apiUrl = process.env.YAOHU_URL || '';
+                const apiKey = process.env.YAOHU_API || '';
+                if (!apiUrl || !apiKey) {
+                    throw new Error('API配置未找到');
+                }
+                const response = await fetch(`${apiUrl}?key=${apiKey}`);
 
                 if (!response.ok) {
                     throw new Error('API请求失败');
