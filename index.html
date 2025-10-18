@@ -336,108 +336,6 @@
             transform: scale(1.05);
         }
 
-        /* 博客文章样式（用于文章和推荐） */
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .blog-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        .blog-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .blog-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: white;
-        }
-
-        .blog-content {
-            padding: 1.5rem;
-        }
-
-        .blog-card h3 {
-            color: var(--text-color);
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .blog-meta {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .blog-card p {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-
-        .read-more {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .read-more:hover {
-            color: var(--secondary-color);
-        }
-
-        /* 文章详情模态框 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 3rem;
-            border-radius: 15px;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--text-light);
-            background: none;
-            border: none;
-        }
-
-        .modal-close:hover {
-            color: var(--text-color);
-        }
-
         /* 页脚 */
         footer {
             background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
@@ -493,10 +391,6 @@
                 font-size: 1.1rem;
             }
 
-            .blog-grid {
-                grid-template-columns: 1fr;
-            }
-
             .about-content {
                 flex-direction: column;
                 text-align: center;
@@ -521,8 +415,6 @@
             <ul class="nav-links">
                 <li><a href="#home">首页</a></li>
                 <li><a href="#websites">我的网站</a></li>
-                <li><a href="#articles-section">文章</a></li>
-                <li><a href="#recommendations-section">推荐</a></li>
                 <li><a href="#about">关于我</a></li>
                 <li><a href="#donate">支持我</a></li>
                 <li><a href="https://space.bilibili.com/3493115224655877" target="_blank">B站</a></li>
@@ -553,22 +445,6 @@
             <h2>我的网站</h2>
             <div class="websites-grid" id="websitesGrid">
                 <!-- 网站将从后台动态加载 -->
-            </div>
-        </section>
-
-        <!-- 我的文章 -->
-        <section id="articles" style="display: none;">
-            <h2>我的文章</h2>
-            <div class="blog-grid" id="articlesGrid">
-                <!-- 文章将从后台动态加载 -->
-            </div>
-        </section>
-
-        <!-- 推荐内容 -->
-        <section id="recommendations" style="display: none;">
-            <h2>好物推荐</h2>
-            <div class="blog-grid" id="recommendationsGrid">
-                <!-- 推荐内容将从后台动态加载 -->
             </div>
         </section>
 
@@ -610,16 +486,6 @@
 
     </div>
 
-    <!-- 文章详情模态框 -->
-    <div class="modal" id="articleModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h2 id="modalTitle"></h2>
-            <div class="blog-meta" id="modalDate"></div>
-            <div id="modalContent" style="line-height: 1.8; white-space: pre-wrap;"></div>
-        </div>
-    </div>
-
     <!-- 页脚 -->
     <footer>
         <p>&copy; 2025 CrisXie (六哥) | 用心创造，用爱分享</p>
@@ -653,76 +519,9 @@
             `).join('');
         }
 
-        function loadArticles() {
-            const articles = JSON.parse(localStorage.getItem('articles')) || [];
-            const section = document.getElementById('articles');
-            const grid = document.getElementById('articlesGrid');
-
-            if (articles.length > 0) {
-                section.style.display = 'block';
-                grid.innerHTML = articles.map(a => `
-                    <article class="blog-card">
-                        <div class="blog-image">${a.icon}</div>
-                        <div class="blog-content">
-                            <h3>${a.title}</h3>
-                            <div class="blog-meta">${a.date}</div>
-                            <p>${a.content.substring(0, 100)}${a.content.length > 100 ? '...' : ''}</p>
-                            <span class="read-more" onclick="showArticle(${a.id})">阅读全文 →</span>
-                        </div>
-                    </article>
-                `).join('');
-            }
-        }
-
-        function loadRecommendations() {
-            const recommendations = JSON.parse(localStorage.getItem('recommendations')) || [];
-            const section = document.getElementById('recommendations');
-            const grid = document.getElementById('recommendationsGrid');
-
-            if (recommendations.length > 0) {
-                section.style.display = 'block';
-                grid.innerHTML = recommendations.map(r => `
-                    <article class="blog-card">
-                        <div class="blog-image">${r.icon}</div>
-                        <div class="blog-content">
-                            <h3>${r.title}</h3>
-                            <p>${r.desc}</p>
-                            ${r.url ? `<a href="${r.url}" target="_blank" class="read-more">查看详情 →</a>` : ''}
-                        </div>
-                    </article>
-                `).join('');
-            }
-        }
-
-        function showArticle(id) {
-            const articles = JSON.parse(localStorage.getItem('articles')) || [];
-            const article = articles.find(a => a.id === id);
-
-            if (article) {
-                document.getElementById('modalTitle').textContent = article.title;
-                document.getElementById('modalDate').textContent = article.date;
-                document.getElementById('modalContent').textContent = article.content;
-                document.getElementById('articleModal').style.display = 'block';
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('articleModal').style.display = 'none';
-        }
-
-        // 点击模态框外部关闭
-        window.onclick = function(event) {
-            const modal = document.getElementById('articleModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
         // 页面加载时加载所有内容
         window.addEventListener('DOMContentLoaded', function() {
             loadWebsites();
-            loadArticles();
-            loadRecommendations();
             fetchQuote();
         });
 
@@ -754,8 +553,6 @@
         // 页面加载时获取语录
         window.addEventListener('DOMContentLoaded', function() {
             loadWebsites();
-            loadArticles();
-            loadRecommendations();
             fetchQuote();
         });
 
