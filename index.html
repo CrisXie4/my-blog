@@ -732,7 +732,7 @@
             quoteElement.textContent = '加载中...';
 
             try {
-                const response = await fetch('/api/random-quote');
+                const response = await fetch('https://api.czcn.xyz/api/sjyy?ckey=&code=5');
 
                 if (!response.ok) {
                     throw new Error('API请求失败');
@@ -740,8 +740,8 @@
 
                 const data = await response.json();
 
-                if (data.quote) {
-                    quoteElement.textContent = `"${data.quote}"`;
+                if (data.data) {
+                    quoteElement.textContent = `"${data.data}"`;
                 } else {
                     quoteElement.textContent = '"每一天都是新的开始。"';
                 }
