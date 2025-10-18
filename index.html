@@ -738,10 +738,10 @@
                     throw new Error('API请求失败');
                 }
 
-                const data = await response.json();
+                const text = await response.text();
 
-                if (data.data) {
-                    quoteElement.textContent = `"${data.data}"`;
+                if (text && text.trim()) {
+                    quoteElement.textContent = `"${text.trim()}"`;
                 } else {
                     quoteElement.textContent = '"每一天都是新的开始。"';
                 }
